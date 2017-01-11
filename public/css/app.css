@@ -1,0 +1,407 @@
+body h1 {
+    font-family: Cormorant Garamond, Times New Roman, serif;
+    color: white;
+    font-size: 22px;
+
+}
+
+#app {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+
+}
+
+#front-page {
+    position: absolute;
+    height: 100%;
+    width: 63%;
+    left: 0px;
+    background: rgb(220, 220, 240);    
+
+}
+
+#tag-info h4 {
+    display: inline;
+
+    font-family: Times New Roman;
+    background: white;
+
+}
+
+#tag-default h4 {
+    display: inline;
+
+    font-family: Times New Roman;
+    background: white;
+
+}
+
+#top {
+    position: absolute;
+    height: 15%;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+}
+
+.tag:hover {
+    background: white;
+    color: teal;
+    cursor: pointer;
+    
+}
+
+#tags-banner {
+
+    position: absolute;
+    height: 19%;
+    width: 100%;
+    top: 0px;
+    background: rgb(215, 215, 215);
+    margin-left: 3px;
+
+
+}
+
+
+#tags-banner li{
+    display: inline;
+    list-style-type: none;
+    padding-right: 3px;
+    font-family: Helvetica;
+    font-size: 12px;
+
+}
+
+
+
+
+#banner {
+    position: absolute;
+    height: 81%;
+    width: 100%;
+    bottom: 0px;
+    background: rgb(0, 0, 0);
+    
+}
+
+#title {
+    position: absolute;
+    top: 0px;
+    left: 10px;
+    
+    
+}
+
+#content {
+    position: absolute;
+    height: 85%;
+    width: 100%;
+    bottom: 0px;
+
+}
+
+#content li{
+    font-size: 14px;
+    font-family: Helvetica;
+}
+
+.disabled {
+  color: orange;
+}
+#side-bar {
+    position: absolute;
+
+    height: 100%;
+    width: 37%;
+    right: 0px;
+}
+
+#side-top {
+    position: absolute;
+    height: 37%;
+    width: 100%;
+
+    top: 0px;
+}
+
+#top-left {
+    position: absolute;
+    height: 100%;
+    width: 37%;
+    background: white;
+    left: 0px;
+    border-style: double;
+    border-color: teal;
+    border-thickness: 1px;    
+    
+}
+
+#profile {
+    position: absolute;
+    
+
+    height: 63%;
+    width: 100%;
+
+}
+
+#log-in {
+    position: relative;    
+    padding: 5px;
+    height: 63%;
+    width: 100%;
+    top: 3%;
+
+}
+
+#profile-template {
+    position: relative;
+}
+#profile-top {
+    position: relative;
+    height: 33%;
+    top: 0px;
+
+}
+
+#profile-controls {
+
+    height: 33%;
+    background: grey;
+    position: relative;
+}
+#profile-banner {
+    background: black;
+    position: relative;
+    
+}
+
+
+#profile-bottom {
+    background: black;
+    position: relative;
+    height: 67%;
+    bottom: 0px;
+}
+
+
+
+#log-in {
+    margin: 20px;
+    padding: 5px;
+    margin-top: 8px;
+    justify-contents: center;
+    color: black;
+    font-family: Cormorant Garamond, Times New Roman, serif;
+}
+
+.pac-container {
+    z-index: 9999;
+}
+
+#add-tag {
+    position: absolute;
+    margin: 10px;
+    color: green;
+    top: 0px;
+    right: 0px;
+}
+
+#find {
+    position: absolute;
+    height: 37%;
+    width: 50%;
+    bottom: 0px;
+    left: 0px;
+    background-color: black;
+    text-align: center;
+    padding: 15px;
+    border-style: groove;
+    border-color: black;
+    border-thickness: 1px;        
+}
+
+#post {
+    position: absolute;
+    height: 37%;
+    width: 50%;
+    bottom: 0px;
+    right: 0px;
+    background-color: black;
+    text-align: center;
+    padding: 15px;
+    border-style: groove;
+    border-color: black;
+    border-thickness: 1px;        
+}
+
+#post:hover {   
+    border-style: outset;
+    border-thickness: 1px;
+    border-color: lightgreen;
+    
+}
+
+#find:hover {
+    border-style: outset;
+    border-thickness: 1px;
+    border-color: lightred;
+
+}
+
+
+.cost {
+    text-align: center;
+}
+
+#top-right {
+    right: 0px;
+    top: 0px;
+    position: absolute;
+    height: 100%;
+    width: 63%;
+    background-color: rgb(215, 215, 215);
+    padding: 10px;
+    font-family: Helvetica;
+}
+
+#side-bottom {
+    position: absolute;
+    height: 63%;
+    width: 100%;
+    
+    bottom: 0px;
+    border-style: double;
+    border-width: 1px;
+    border-color: white;
+}
+
+#map {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+}
+
+#create-post {
+
+    z-index: 999;
+    background: rgba(255, 255, 255, 0.7);
+    height: 90%;
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+    position: relative;
+
+}
+
+#post-details {
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+    position: relative;
+    height: 80%;
+    width: 80%;
+    background: rgba(50, 50, 50, 0.6);
+    padding: 20px;    
+}
+
+
+#post-heading {
+    top: 5%;
+    position: absolute;
+    height: 5%;
+    width: 20%;
+    background: darkgray;
+    color: white;
+
+}
+#post-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+    position: relative;
+    height: 80%;
+    width: 80%;
+
+}
+
+#offer-or-article {
+    position: relative;
+
+}
+
+
+
+
+/* MODAL STYLES */
+
+
+.modal-mask {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .5);
+  display: table;
+  transition: opacity .6s ease;
+}
+
+.modal-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.modal-container {
+  width: 300px;
+  margin: 0px auto;
+  padding: 20px 30px;
+  background-color: #fff;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+  transition: all .3s ease;
+  font-family: Cormorant Garamond, Times New Roman, serif;
+}
+
+.modal-header h3 {
+  margin-top: 0;
+  color: #42b983;
+}
+
+.modal-body {
+  margin: 20px 0;
+}
+
+.modal-default-button {
+  float: right;
+}
+
+/*
+ * The following styles are auto-applied to elements with
+ * transition="modal" when their visibility is toggled
+ * by Vue.js.
+ *
+ * You can easily play with the modal transition by editing
+ * these styles.
+ */
+
+.modal-enter {
+  opacity: 0;
+}
+
+.modal-leave-active {
+  opacity: 0;
+}
+
+.modal-enter .modal-container,
+.modal-leave-active .modal-container {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}

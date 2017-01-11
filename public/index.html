@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>The Torrential Times</title>
+        <link rel="stylesheet" href="css/app.css">
+        <link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+        <script src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"></script>
+
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
+
+        <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCspgVlNqoa887cssVbYN4KwHfO1m5miyM"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/geocomplete/1.7.0/jquery.geocomplete.js"></script>
+        <link rel="stylesheet" href="https://npmcdn.com/leaflet@1.0.0-rc.3/dist/leaflet.css"/>
+        <script src="https://npmcdn.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script>
+
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/magicsuggest/2.1.4/magicsuggest-min.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/magicsuggest/2.1.4/magicsuggest-min.js"></script>
+        <script src="https://unpkg.com/vue@2.1.8/dist/vue.js"></script>
+        <script src="https://unpkg.com/vuefire/dist/vuefire.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-focus/2.1.0/vue-focus.js"></script>
+
+
+    </head>
+    <body>
+        <div id="app">
+            <!--
+                 MODAL TEMPLATES
+               -->
+
+            <modal id="register-modal" v-show="registerShow" :newuser="newuser" :registerComplete="registerComplete">
+                <div slot="info">
+                    <div id="register-message-incomplete" v-show="!registerComplete">
+                        <h3>register with Torrential Times</h3>
+                    </div>
+                </div>
+                <div slot="inputs">
+                    <div class="row">
+                        <label>email: <input type="email" v-model="newuser.email" class="form-control"/></label>
+                    </div>
+                    <div class="row">
+                        <label>password: <input type="password" v-model="newuser.password" class="form-control"/></label>
+                    </div>
+
+                </div>
+                <div slot="buttons">
+                    <div class="col-md-6" v-show="!registerComplete">
+                        <button class="btn btn-primary" @click.prevent="addUser">submit</button>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-secondary" @click.prevent="cancelRegister">cancel</button>
+                    </div>
+                </div>
+            </modal>
+
+
+            <modal id="tag-modal" v-show="tagModal" :newtag="newtag">
+                <div slot="info">
+                    <h3>create tag</h3>
+                </div>
+                <div slot="inputs">
+                    <label for="get-tag-name">name: </label><input v-model="newtag.name" type="text" id="get-tag-name" class="form-control" placeholder="tag_name(parent_name)"/>
+                    <label for="get-can-be">can be: </label><input v-model="newtag.canbe" type="text" id="get-can-be" placeholder="separate by commas" class="form-control"/>
+                    <label for="get-should-be">should be: </label><input v-model="newtag.shouldbe" type="text" id="get-should-be" placeholder="recommendation" class="form-control"/>
+                    <label for="get-why">why? </label><input v-model="newtag.why" type="text" id="get-why" placeholder="justification" class="form-control"/>
+                </div>
+                <div slot="buttons" class="row">
+                    <div class="col-md-6">
+                        <button class="btn btn-primary" @click.prevent="deployTag" id="deploy-tag">submit</button>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-secondary" v-on:click.prevent="cancelTag">cancel</button>
+                    </div>
+
+                </div>
+            </modal>
+
+            <modal id="post-modal" v-show="post" :newarticle="newarticle" :newoffer="newoffer">
+                <div slot="info" style="text-align:center">
+                    <h3>post to: <span v-show="articleShow"><em>news</em></span><span v-show="offerShow"><em>offers</em></span></h3>
+                </div>
+                <div slot="inputs">
+                    <div id="choose" v-show="!offerShow && !articleShow">
+                        <div class="row">
+                            <button class="btn btn-lg btn-success btn-block" id="post-article" v-on:click.prevent="postArticle"><h3>news</h3></button>
+                        </div>
+                        <div class="row">
+                            <button class="btn btn-lg btn-success btn-block" id="post-offer" v-on:click.prevent="postOffer"><h3>offers</h3></button>
+                        </div>
+                    </div>
+                    <div id="offer-inputs" v-show="offerShow">
+                        <label for="get-offer-name">name: </label><input id="get-offer-name" v-model="newoffer.name" class="form-control" type="text"/>
+                        <label for="get-offer-tags">tags: </label><input id="get-offer-tags" model="newoffer.tags" class="form-control" type="text" placeholder="separate by commas"/>
+                        <label for="get-offer-value">value: </label><input id="get-offer-value" v-model="newoffer.value" type="number" class="form-control" placeholder="GRATIS" disabled/>
+                        <label for="get-offer-validfrom">valid from: </label><input id="get-offer-validfrom" v-model="newoffer.validFrom" class="form-control"/>
+                        <label for="get-offer-validto">to: </label><input id="get-offer-validto" v-model="newoffer.validTo" class="form-control"/>
+                        <form>
+                            <label for="get-offer-location">location: </label><input id="get-offer-location" v-on:blur="newoffer.location = $event.target.value" type="text" class="form-control"/>
+                            <div style="visibility:hidden">
+                                <input name="lat" type="text" value=""/>
+                                <input name="lng" type="text" value=""/>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="article-inputs" v-show="articleShow">
+                        <label for="get-article-headline">headline: </label><input v-model="newarticle.headline" class="form-control" type="text" id="get-article-headline"/>
+                        <label for="get-article-link">link: </label><input v-model="newarticle.link" class="form-control" type="text" id="get-article-link"/>
+                        <label for="get-article-tags">tags: </label><input v-model="newarticle.tags" class="form-control" type="text" id="get-article-tags" placeholder="separate by commas"/>
+                        <form id="article-form">
+                            <label for="get-article-location">location: </label><input name="formatted_address" v-on:blur="newarticle.location = $event.target.value"  class="form-control details" type="text" id="get-article-location"/>
+                            <div style="visibility:hidden">
+                                <input name="lat" type="text" value="" class="details"/>
+                                <input name="lng" type="text" value="" class="details"/>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div slot="buttons" v-show="offerShow || articleShow">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button id="submit-article" v-show="articleShow" class="btn btn-primary" v-on:click.prevent="deployArticle">submit</button>
+                            <button id="submit-offer"v-show="offerShow" class="btn btn-primary" v-on:click.prevent="deployOffer">submit</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-secondary" v-on:click.prevent="cancelOffer">cancel</button>
+                        </div>
+
+
+                    </div>
+                </div>
+            </modal>
+
+
+            <div id="front-page">
+                <div id="top">
+                    <div id="tags-banner">
+                        <ul class="list-group">
+                            <tag-comp v-for="tag in tags" :tag="tag" :key="tag['.key']">{{ tag.name }}</tag-comp>
+                        </ul>
+                    </div>
+                    <div id="banner">
+                        <div id="title">
+                            <h1>The<br>Torrential<br>Times</h1>
+                        </div>
+                    </div>
+                </div>
+                <div id="content" class="container-fluid">
+                    <ul class="list-group" v-show="news">
+                        <article-comp v-for="article in articles" :article="article" :key="article['.key']"></article-comp>
+                    </ul>
+
+                </div>
+            </div>
+            <div id="side-bar">
+                <div id="side-top">
+                    <div id="top-left">
+                        <div id="log-in" v-show="logInShow">
+                            <div class="row" style="padding: 5px">
+                                <input type="email" v-model="logIn.email" id="get-login-email" placeholder="email" />
+                            </div>
+                            <div class="row" style="padding: 5px">
+                                <input type="password" v-model="logIn.password" id="get-login-password"  placeholder="password" />
+                            </div>
+                            <div class="row" style="padding: 5px">
+                                <div class="col-md-6">
+                                    <button class="btn btn-primary" @click="login">log in</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-secondary" @click="registerShow=true">register</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="profile">
+                            <profile v-show="!logInShow">
+
+                            </profile>
+
+                        </div>
+                        <div id="find" role="button">
+                            <div><h1><i class="fa fa-search"></i></h1></div>
+                        </div>
+                        <div id="post" v-on:click="showPost" role="button">
+                            <div><h1><i class="fa fa-file-text"></i></h1></div>
+                        </div>
+                    </div>
+                    <div id="top-right">
+                        <div id="tag-top">
+
+                        </div>
+                        <span id="tag-default" v-show="tagName==''">
+                            <h4>
+                                <span><button class="btn btn-info" v-on:click="tagTop"><i class="fa fa-level-up"></i></button></span>
+                                <div style="text-align: center; font-size: 25px; color: red; padding-right: 5px;">tags</div><br>
+                                <span style="padding: 5px;"><em>can be: </em>clear, unclear, concise, inconcise, offers, news</span><br>
+                                <span style="padding: 5px;"><em>should be: </em>clear, concise<br></span>
+                                <span style="padding: 5px;"><em>because: </em>unclear tags won't be up-voted and inconcise tags cost more!</span>
+
+                            </h4>
+                        </span>
+                        <span id="tag-info" v-show="tagName!=''">
+                            <h4>
+                                <span><button class="btn btn-info" v-on:click="tagTop"><i class="fa fa-level-up"></i></button></span>
+                                <span style="font-size: 25px; color: red; padding-right: 5px;"><button class="btn btn-info" v-on:click="tagTop"><i class="fa fa-level-up"></i></button>                        {{ tagName }}</span><br>
+                                <span style="padding: 5px;"><em>should be: </em>{{ tagShouldBe }}<br></span>
+                                <span style="padding: 5px;"><em>because: </em>{{ tagWhy }}</span>
+                            </h4>
+                        </span>
+                        <div id="add-tag">
+                            <button class="btn btn-success" v-on:click="tagModal=true"><i class="fa fa-tag"></i></button>
+                        </div>
+
+                    </div>
+                </div>
+                <div id="side-bottom">
+                    <div id="map">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <template id="tag-template">
+        <li class="">
+            <span @click="displayInfo" class="label label-default img-rounded tag">
+                <slot></slot>
+            </span>
+        </li>
+
+    </template>
+
+    <template id="article-template">
+        <!--
+             <div class="article-header">
+             <div class="article-timestamp">{{ postedOn }}</div>
+             <div class="article-headline">{{ headline }}</div>
+             <div class="creator">{{ postedBy }}</div>
+             </div>
+           -->
+        <li class="list-group-item">
+            <div class="article-header">
+                <div class="creator"></div>
+            </div>
+            <div class="article-body">
+                <a v-bind:href="article.link">{{ article.headline}}</a>
+            </div>
+            <div class="article-footer">
+                <i class="glyphicon glyphicon-chevron-up" @click="upVote" :class="{disabled: upvoted}"></i>
+                <span class="label label-primary">{{ votes }}</span>
+                <i class="glyphicon glyphicon-chevron-down" @click="downVote" :class="{disabled: downvoted}"></i>
+            </div>
+
+            <div class="article-tags"></div>
+        </li>
+
+    </template>
+
+    <template id="modal-template">
+        <transition name="modal">
+            <div class="modal-mask">
+                <div class="modal-wrapper">
+                    <div class="modal-container">
+                        <div class="modal-header">
+                            <slot name="info"></slot>
+                        </div>
+                        <div class="modal-body">
+                            <slot name="inputs"></slot>
+                        </div>
+                        <div class="modal-footer">
+                            <slot name="buttons"></slot>
+                        </div>
+
+                    </div>
+                </div>
+        </transition>
+    </template>
+
+    <template id="profile-template">
+        <transition name="">
+            <div id="profile-top">
+                <div id="profile-controls">
+                    <div class="col-xs-2" id="profile-select">
+                        <a href="#"><i style="color: white;" class="fa fa-user"></i></a>
+                    </div>
+                    <div class="col-xs-2" id="anchors-select">
+                        <a href="#"><i style="color: white;" class="fa fa-anchor"></i></a>
+                    </div>
+                    <div class="col-xs-2" id="bank-select">
+                        <a href="#"><i style="color: white;" class="fa fa-money"></i></a>
+                    </div>
+
+                    <div class="col-xs-2" id="analytics-select">
+                        <a href="#"><i style="color: white;" class="fa fa-line-chart"></i></a>
+                    </div>
+                    <div class="col-xs-2" id="menu-select">
+                        <a href="#"><i style="color: white;" class="fa fa-bars"></i></a>
+                    </div>
+                    <div class="col-xs-2" id="exit-select">
+                        <a href="#"><i style="color: white;" class="fa fa-power-off"></i></a>
+                    </div>
+
+                </div>
+                <div id="profile-banner"></div>
+            </div>
+            <div id="profile-bottom">
+                <div id="funds"></div>
+                <div id="social"></div>
+                <div id="profile-achievements"></div>
+                <div id="currency-rates"></div>
+            </div>
+        </transition>
+    </template>
+
+    <script src="js/app.js"></script>
+
+
+
+
+
+
+</html>
