@@ -57,11 +57,11 @@
 
 A reader-curated newspaper that rewards honest reporting and penalizes dishonest reporting
 
-The problem of fake news may best be remedied by creating and popularizing decentralized news streams.  If today's prominent news organizations were stripped of their status as the de-facto messengers and arbiters of truth,
-we might be able to see them as the mere vestiges of 20th century business they are, unsustainable in their prioritization of profit and vulnerable to replacement by better models.  Like traditional media
+The problem of fake news may best be remedied by creating and popularizing decentralized news streams.  If today's prominent news organizations were stripped of their status as de-facto arbiters and messengers of truth,
+we might be able to see them as the mere vestiges of 20th century business they are - unsustainable in their prioritization of profit and vulnerable to replacement by better models.  Like traditional media
 organizations before Facebook, traditional hotels before AirBnB, or traditional Taxi companies before Uber, news organizations are operating under the illusion that they control
-the sole infrastructure necessary for the services they offer.  That this wasn't the case in the above named industries became apparent only after platform businesses came along and gave
-consumers a way of offering their own goods and services to meet each other's needs.  Consumers are becoming privy to the value that may be offered by their peers.  This is happening across all industries.
+the sole infrastructure necessary to provide the services they offer.  That this wasn't the case in the above named industries became apparent only after platform businesses came along and gave
+consumers a way of offering their own goods and services to meet each other's needs.  Now, consumers are becoming privy to the value that may be offered by their peers.  This is happening across all industries.
 
 Now it's time for news to join the crowd (and the crowd to join news).
 
